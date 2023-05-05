@@ -1,0 +1,33 @@
+version: '3.8'
+
+volumes:
+  mongodb_vol:
+
+networks:
+  express_net:
+    driver: bridge
+
+services:
+  express:
+    image: mongo-express
+    ports:
+     - 8081:8081
+    networks:
+     - express_net
+    depends_on:
+     - mongodb
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin123
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin123@mongodb:27017/
+      ME_CONFIG_MONGODB_SERVER: mongodb
+
+  mongodb:
+    image: mongo:4.4.3
+    networks:
+     - express_net
+    volumes:
+     - mongodb_vol:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123

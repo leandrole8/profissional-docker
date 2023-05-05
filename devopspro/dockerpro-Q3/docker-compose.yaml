@@ -1,0 +1,33 @@
+version: '3.8'
+
+volumes:
+  postgre_vol:
+
+networks:
+  postgre_net:
+    driver: bridge
+
+services:
+  pgadmin:
+    image: dpage/pgadmin4:7.0
+    ports:
+     - 8080:80
+    networks:
+      - postgre_net
+    depends_on:
+      - postgre
+    environment:
+      PGADMIN_DEFAULT_EMAIL: teste@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: teste123456
+
+  postgre:
+    image: postgres:15.2
+    networks:
+      - postgre_net
+    ##ports:
+     ## - 5432:5432
+    volumes:
+      - postgre_vol:/data/db
+    environment:
+      POSTGRES_USER: devopspro
+      POSTGRES_PASSWORD: pro123456
